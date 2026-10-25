@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Skip chit-chat sessions (no files touched, no substantive answer) instead of filing them.
+- Session briefing no longer calls your own entries a teammate's when you are the only author.
+
 ## 0.1.0 (2026-10-25)
 
 First public release.

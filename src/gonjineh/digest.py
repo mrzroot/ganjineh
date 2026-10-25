@@ -113,8 +113,8 @@ def build_entry(s: Session, *, author: str, project: str, area_rules=None, defau
             c = _first(c.splitlines()[0], 140)
             if c not in commands:
                 commands.append(c)
-    if min_signal and not files and len(assistants) < 1:
-        return None
+    if min_signal and not files and len(assistants[-1] if assistants else "") < 120 and not any(ENDPOINT[0].search(a) for a in assistants):
+        return None  # chit-chat with no files touched and no substantive answer
     corpus = assistants + [str(i.get("content", "")) + str(i.get("new_string", "")) for _, i in s.tool_calls if isinstance(i, dict)]
     endpoints = []
     for text in assistants + [t for t in corpus if t]:

@@ -223,11 +223,13 @@ def build_index(entries: list[dict], project: str | None = None, me: str | None 
 
 def briefing(entries: list[dict], me: str | None, limit: int = 6, max_chars: int = 1800) -> str:
     """Short text injected at session start: what teammates did lately."""
-    others = [e for e in entries if e.get("author") != me] or entries
+    mine_only = not [e for e in entries if e.get("author") != me]
+    others = entries if mine_only else [e for e in entries if e.get("author") != me]
     others = sorted(others, key=lambda e: (e.get("date", ""), e.get("id", "")), reverse=True)[:limit]
     if not others:
         return ""
-    out = ["Team brain (gonjineh): recent work by your teammates in this project. Search before you assume something is missing: `gonjineh search \"<words>\"` or MCP tool search_memory."]
+    who = "recent entries (only yours so far)" if mine_only else "recent work by your teammates in this project"
+    out = [f"Team brain (gonjineh): {who}. Search before you assume something is missing: `gonjineh search \"<words>\"` or MCP tool search_memory."]
     for e in others:
         bits = f"- {e['date']} {e['author']} [{e['area']}] {e['title']}"
         if e.get("files"):
