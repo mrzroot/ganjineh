@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use gonjineh, please cite it as below."
+title: "gonjineh: git-native shared memory for a team's AI coding agents"
+type: software
+version: 0.1.0
+date-released: 2026-10-25
+license: MIT
+repository-code: "https://github.com/mrzroot/gonjineh"
+url: "https://mrzroot.github.io/gonjineh/"
+authors:
+  - family-names: Zare
+    given-names: Mohammadreza
+keywords:
+  - ai-agents
+  - claude-code
+  - codex
+  - mcp
+  - team-memory
+  - git
+  - persian
+abstract: "Dependency-free command-line tool that turns finished AI coding sessions into scrubbed, searchable markdown notes in a team's own git repository and surfaces teammates' related work to each agent through hooks and an MCP server. Rule-based (no LLM), no server."

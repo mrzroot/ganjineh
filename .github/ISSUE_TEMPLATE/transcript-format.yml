@@ -1,0 +1,12 @@
+name: New or changed transcript format
+description: A tool or CLI version whose sessions are not captured correctly
+labels: [transcripts]
+body:
+  - type: input
+    id: tool
+    attributes: {label: "Tool and version", placeholder: "Gemini CLI 0.65.0"}
+    validations: {required: true}
+  - type: textarea
+    id: sample
+    attributes: {label: "A tiny REDACTED sample of the file (a few lines) and where it lives on disk"}
+    validations: {required: true}

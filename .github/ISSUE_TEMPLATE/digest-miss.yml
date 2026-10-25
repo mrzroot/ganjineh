@@ -1,0 +1,11 @@
+name: Digest or search miss
+description: A decision/gotcha was not extracted, or a related note was not found
+labels: [digest, search]
+body:
+  - type: textarea
+    id: what
+    attributes: {label: "What should have been extracted or found? (redacted, short)"}
+    validations: {required: true}
+  - type: input
+    id: lang
+    attributes: {label: "Language of the text", placeholder: "Persian / English / mixed"}

@@ -1,0 +1,48 @@
+
+[maryam] $ gonjineh init --brain /tmp/demo/team-brain.git --project shop --author maryam --area backend
+brain: /tmp/demo/home-maryam/brains/tmp-gonjineh-demo-z600k8co-team-brain-git (cloned)
+  CLAUDE.md: created
+  AGENTS.md: created
+  GEMINI.md: created
+  .github/copilot-instructions.md: created
+  .cursor/rules/gonjineh.mdc: created
+  .claude hooks: /tmp/demo/shop-maryam/.claude/settings.json
+  .mcp.json: /tmp/demo/shop-maryam/.mcp.json
+  .cursor/mcp.json: /tmp/demo/shop-maryam/.cursor/mcp.json
+  .gemini/settings.json: /tmp/demo/shop-maryam/.gemini/settings.json
+  .vscode/mcp.json: /tmp/demo/shop-maryam/.vscode/mcp.json
+  codex: skipped (it is user-level config; run `gonjineh init --codex` to add notify + MCP to ~/.codex/config.toml)
+next: commit .gonjineh.json, CLAUDE.md, AGENTS.md etc. so teammates get the same setup; each teammate runs `gonjineh init` once.
+
+[maryam] $ gonjineh capture --file /tmp/demo/m1.jsonl --sync
+m1.jsonl: stored 7b88d6deca area=backend files=2 redactions=0
+{"committed": false, "pulled": false, "pushed": true, "remote": true, "error": ""}
+
+[maryam] $ gonjineh capture --file /tmp/demo/m2.jsonl --sync
+m2.jsonl: stored d737c50590 area=backend files=1 redactions={'stripe-key': 1}
+{"committed": false, "pulled": true, "pushed": true, "remote": true, "error": ""}
+
+--- reza's side: he is about to build the refund screen ---
+
+[reza] $ gonjineh search --pull refund screen
+[7b88d6deca] 2026-03-02 maryam (claude-code) · backend · Add a refund endpoint for orders. Use POST /api/orders/refund and never store the card nu…  (score 3.194)
+    files: server/routes/refunds.py, server/models/refund.py
+    api:   POST /api/orders/refund
+    decision: We decided to store only the last four digits because PCI scope is out of budget.
+
+[reza] $ gonjineh who server/routes/refunds
+maryam: 1 entries (last 2026-03-02; claude-code)
+
+[reza] $ gonjineh search ورود login
+[d737c50590] 2026-03-02 maryam (claude-code) · backend · ایجاد API ورود با ایمیل و رمز: POST /api/login  (score 2.753)
+    files: server/routes/auth.py
+    api:   POST /api/login
+    decision: تصمیم گرفتیم توکن JWT را در کوکی httpOnly بگذاریم چون ذخیره در localStorage امن نیست.
+
+[reza] $ gonjineh recall
+Team brain (gonjineh): recent work by your teammates in this project. Search before you assume something is missing: `gonjineh search "<words>"` or MCP tool search_memory.
+- 2026-03-02 maryam [backend] ایجاد API ورود با ایمیل و رمز: POST /api/login (files: server/routes/auth.py) (api: POST /api/login)
+- 2026-03-02 maryam [backend] Add a refund endpoint for orders. Use POST /api/orders/refund and never store the card nu… (files: server/routes/refunds.py, server/models/refund.py) (api: POST /api/orders/refund)
+
+--- what is actually in the shared git repo (secrets scrubbed before writing) ---
+sk_live in git history: False  |  commits: 2

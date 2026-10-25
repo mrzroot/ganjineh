@@ -1,0 +1,21 @@
+name: Bug report
+description: Something broke (hook, sync, search, MCP)
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: "Never paste real secrets, tokens or private transcripts. Redact first."
+  - type: input
+    id: ver
+    attributes: {label: "gonjineh version and OS", placeholder: "0.1.0, Ubuntu 24.04"}
+    validations: {required: true}
+  - type: input
+    id: tool
+    attributes: {label: "AI tool and version", placeholder: "Claude Code 2.1.197"}
+  - type: textarea
+    id: what
+    attributes: {label: "What happened, and what did you expect?"}
+    validations: {required: true}
+  - type: textarea
+    id: doctor
+    attributes: {label: "Output of `gonjineh doctor`", render: text}
