@@ -1,5 +1,5 @@
-from gonjineh.textnorm import normalize, tokenize
-from gonjineh import store
+from ganjineh.textnorm import normalize, tokenize
+from ganjineh import store
 
 
 def test_arabic_yeh_kaf_unified():

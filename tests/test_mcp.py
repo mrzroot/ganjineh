@@ -1,5 +1,5 @@
 import json
-from gonjineh import mcp, core
+from ganjineh import mcp, core
 
 
 class FakeCtx:

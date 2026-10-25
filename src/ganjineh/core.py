@@ -30,15 +30,15 @@ class Ctx:
         import os
         root = brain.find_project_root(cwd)
         if root is None:
-            raise NoProject("no .gonjineh.json found in this directory or any parent; run `gonjineh init`")
+            raise NoProject("no .ganjineh.json found in this directory or any parent; run `ganjineh init`")
         cfg = brain.load_project(root)
         ucfg = brain.user_config()
         proj = cfg["project"]
         up = (ucfg.get("projects") or {}).get(proj, {})
-        bpath = Path(up.get("brain") or os.environ.get("GONJINEH_BRAIN") or brain.brain_dir_for(cfg.get("brain", ""), proj))
+        bpath = Path(up.get("brain") or brain.env("BRAIN") or brain.brain_dir_for(cfg.get("brain", ""), proj))
         rules = [(a, g if isinstance(g, list) else [g]) for a, g in (cfg.get("areas") or {}).items()] or None
         ignore = []
-        for p in (root / brain.BRAIN_IGNORE,):
+        for p in (root / n for n in brain.IGNORE_FILES):
             if p.exists():
                 ignore += digest.load_ignore(p.read_text(encoding="utf-8"))
         return cls(root=root, project=proj, brain=bpath, author=up.get("author") or brain.default_author(),
@@ -60,7 +60,7 @@ def capture_session(ctx: Ctx, session, detail="normal") -> dict:
         return {"stored": False, "reason": "skipped (private, ignored files, or no signal)"}
     entry, rep = built
     p = store.write_entry(ctx.brain, entry)
-    brain.commit_local(ctx.brain, f"gonjineh: {entry['author']} {entry['tool']} {entry['area']}: {entry['title'][:60]}")
+    brain.commit_local(ctx.brain, f"ganjineh: {entry['author']} {entry['tool']} {entry['area']}: {entry['title'][:60]}")
     ctx.reindex()
     return {"stored": True, "path": str(p), "id": entry["id"], "area": entry["area"], "redactions": rep.counts, "files": len(entry["files"])}
 
@@ -90,7 +90,7 @@ def add_note(ctx: Ctx, text: str, title: str = "", area: str = "", files=None, t
             if e not in entry["endpoints"]:
                 entry["endpoints"].append(e)
     p = store.write_entry(ctx.brain, entry)
-    brain.commit_local(ctx.brain, f"gonjineh: note by {ctx.author}: {title_c[:60]}")
+    brain.commit_local(ctx.brain, f"ganjineh: note by {ctx.author}: {title_c[:60]}")
     ctx.reindex()
     return {"stored": True, "id": eid, "path": str(p), "area": entry["area"], "redactions": rep.counts}
 

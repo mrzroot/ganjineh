@@ -7,12 +7,29 @@ import subprocess
 import time
 from pathlib import Path
 
-PROJECT_FILE = ".gonjineh.json"
-BRAIN_IGNORE = ".brainignore"
+PROJECT_FILE = ".ganjineh.json"
+LEGACY_PROJECT_FILE = ".gonjineh.json"  # pre-0.1.1 name (the project was briefly spelled "gonjineh")
+BRAIN_IGNORE = ".ganjinehignore"
+IGNORE_FILES = (".ganjinehignore", ".brainignore")  # .brainignore is still read
+
+
+def env(name: str, default=None):
+    """GANJINEH_<name>, falling back to the deprecated GONJINEH_<name>."""
+    return os.environ.get("GANJINEH_" + name) or os.environ.get("GONJINEH_" + name) or default
+
+
+def project_file(root: Path) -> Path:
+    """The project config in `root`: the new name, or the legacy one if only that exists."""
+    new, old = root / PROJECT_FILE, root / LEGACY_PROJECT_FILE
+    return old if (old.exists() and not new.exists()) else new
 
 
 def home() -> Path:
-    return Path(os.environ.get("GONJINEH_HOME") or Path.home() / ".gonjineh")
+    e = env("HOME")
+    if e:
+        return Path(e)
+    new, old = Path.home() / ".ganjineh", Path.home() / ".gonjineh"
+    return old if (old.is_dir() and not new.exists()) else new
 
 
 def git(args, cwd, check=True, timeout=60):
@@ -38,8 +55,8 @@ def save_user_config(cfg: dict) -> None:
 
 def default_author() -> str:
     cfg = user_config()
-    if os.environ.get("GONJINEH_AUTHOR"):
-        return os.environ["GONJINEH_AUTHOR"]
+    if env("AUTHOR"):
+        return env("AUTHOR")
     if cfg.get("author"):
         return cfg["author"]
     r = subprocess.run(["git", "config", "user.name"], capture_output=True, text=True)
@@ -49,13 +66,13 @@ def default_author() -> str:
 def find_project_root(start: str | Path | None = None) -> Path | None:
     p = Path(start or os.getcwd()).resolve()
     for d in [p, *p.parents]:
-        if (d / PROJECT_FILE).exists():
+        if (d / PROJECT_FILE).exists() or (d / LEGACY_PROJECT_FILE).exists():
             return d
     return None
 
 
 def load_project(root: Path) -> dict:
-    return json.loads((root / PROJECT_FILE).read_text())
+    return json.loads(project_file(root).read_text())
 
 
 def brain_dir_for(remote: str, project: str) -> Path:
@@ -94,9 +111,9 @@ def _seed(path: Path) -> None:
         gi.write_text("INDEX.md\n.cache/\n")
     rd = path / "README.md"
     if not rd.exists():
-        rd.write_text("# Team brain\n\nShared memory for our AI coding agents, managed by [gonjineh](https://github.com/mrzroot/gonjineh).\n"
+        rd.write_text("# Team brain\n\nShared memory for our AI coding agents, managed by [ganjineh](https://github.com/mrzroot/ganjineh).\n"
                       "One markdown file per AI session under `entries/`. Teammates can read these digests; never commit secrets.\n")
-    cfg = path / "gonjineh.json"
+    cfg = path / "ganjineh.json"
     if not cfg.exists():
         cfg.write_text(json.dumps({"schema": 1}) + "\n")
 
@@ -110,17 +127,17 @@ def has_remote(path: Path) -> bool:
 
 
 def commit_local(path: Path, message: str) -> bool:
-    paths = [x for x in ("entries", ".gitignore", "README.md", "gonjineh.json") if (path / x).exists()]
+    paths = [x for x in ("entries", ".gitignore", "README.md", "ganjineh.json", "gonjineh.json") if (path / x).exists()]
     if paths:
         git(["add", "-A", "--", *paths], path)
     if git(["diff", "--cached", "--quiet"], path, check=False).returncode == 0:
         return False
-    env_args = ["-c", "user.name=" + (default_author() or "gonjineh"), "-c", "user.email=gonjineh@users.noreply.local"]
+    env_args = ["-c", "user.name=" + (default_author() or "ganjineh"), "-c", "user.email=ganjineh@users.noreply.local"]
     git([*env_args, "commit", "-q", "-m", message], path)
     return True
 
 
-def sync(path: Path, message: str = "gonjineh: sync", retries: int = 4) -> dict:
+def sync(path: Path, message: str = "ganjineh: sync", retries: int = 4) -> dict:
     """pull --rebase, commit own entries, push. Entries are one-file-per-session so rebase conflicts cannot happen
     unless two people write the very same file, which the naming scheme prevents."""
     path = Path(path)
@@ -164,7 +181,7 @@ def pull_only(path: Path, timeout: int = 60) -> bool:
     except subprocess.TimeoutExpired:
         return False
     if git(["rev-parse", "--verify", "-q", "HEAD"], path, check=False).returncode != 0:
-        commit_local(path, "gonjineh: seed")  # unborn clone: give rebase something to replay
+        commit_local(path, "ganjineh: seed")  # unborn clone: give rebase something to replay
     branch = _branch(path)
     if git(["rev-parse", "--verify", "-q", f"origin/{branch}"], path, check=False).returncode != 0:
         return False

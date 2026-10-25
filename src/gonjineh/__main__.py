@@ -1,2 +1,2 @@
-from .cli import main
-raise SystemExit(main())
+from ganjineh.cli import legacy_main
+raise SystemExit(legacy_main())

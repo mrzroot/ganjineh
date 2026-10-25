@@ -36,9 +36,9 @@ def test_bob_mcp_finds_alices_entry(team):
     reqs = [{"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {"protocolVersion": "2025-06-18", "capabilities": {}, "clientInfo": {"name": "t", "version": "0"}}},
             {"jsonrpc": "2.0", "method": "notifications/initialized"},
             {"jsonrpc": "2.0", "id": 2, "method": "tools/call", "params": {"name": "search_memory", "arguments": {"query": "refund"}}}]
-    p = subprocess.run([sys.executable, "-m", "gonjineh", "mcp"], cwd=team["bob_dir"], env=env, input="\n".join(map(json.dumps, reqs)) + "\n", capture_output=True, text=True, timeout=30)
+    p = subprocess.run([sys.executable, "-m", "ganjineh", "mcp"], cwd=team["bob_dir"], env=env, input="\n".join(map(json.dumps, reqs)) + "\n", capture_output=True, text=True, timeout=30)
     out = [json.loads(l) for l in p.stdout.splitlines()]
-    assert out[0]["result"]["serverInfo"]["name"] == "gonjineh"
+    assert out[0]["result"]["serverInfo"]["name"] == "ganjineh"
     assert "alice" in out[1]["result"]["content"][0]["text"] and "refunds" in out[1]["result"]["content"][0]["text"]
 
 
@@ -133,9 +133,9 @@ def test_hook_stop_captures_and_session_start_injects(team):
 
 
 def test_hook_never_fails_outside_project_or_on_garbage(tmp_path):
-    r = run(["hook", "claude"], tmp_path, {"GONJINEH_HOME": str(tmp_path / "h")}, inp="not json")
+    r = run(["hook", "claude"], tmp_path, {"GANJINEH_HOME": str(tmp_path / "h")}, inp="not json")
     assert r.returncode == 0
-    r = run(["hook", "claude"], tmp_path, {"GONJINEH_HOME": str(tmp_path / "h")}, inp=json.dumps({"hook_event_name": "Stop", "cwd": str(tmp_path)}))
+    r = run(["hook", "claude"], tmp_path, {"GANJINEH_HOME": str(tmp_path / "h")}, inp=json.dumps({"hook_event_name": "Stop", "cwd": str(tmp_path)}))
     assert r.returncode == 0 and r.stdout == ""
 
 
@@ -164,11 +164,11 @@ def test_init_is_idempotent_and_doctor_ok(team):
     assert r.returncode == 0
     r = run(["doctor"], a, team["alice"])
     assert "claude hooks: ✓" in r.stdout and "remote: yes" in r.stdout
-    assert (a / "CLAUDE.md").read_text().count("gonjineh:begin") == 1
+    assert (a / "CLAUDE.md").read_text().count("ganjineh:begin") == 1
 
 
 def test_uninstall_leaves_brain(team):
     a = team["alice_dir"]
     run(["uninstall"], a, team["alice"])
     assert not (a / ".claude" / "settings.json").exists()
-    assert (a / ".gonjineh.json").exists()
+    assert (a / ".ganjineh.json").exists()

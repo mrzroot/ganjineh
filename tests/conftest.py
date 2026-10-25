@@ -7,10 +7,10 @@ SRC = str(Path(__file__).parent.parent / "src")
 
 
 def run(args, cwd, env=None, inp=None):
-    e = {k: v for k, v in os.environ.items() if not k.startswith("GONJINEH_") and k != "CODEX_HOME"}
+    e = {k: v for k, v in os.environ.items() if not k.startswith(("GANJINEH_", "GONJINEH_")) and k != "CODEX_HOME"}
     e["PYTHONPATH"] = SRC
     e.update(env or {})
-    return subprocess.run([sys.executable, "-m", "gonjineh", *args], cwd=cwd, env=e, capture_output=True, text=True, input=inp, timeout=60)
+    return subprocess.run([sys.executable, "-m", "ganjineh", *args], cwd=cwd, env=e, capture_output=True, text=True, input=inp, timeout=60)
 
 
 def git(*a, cwd):
@@ -19,7 +19,7 @@ def git(*a, cwd):
 
 @pytest.fixture
 def team(tmp_path, monkeypatch):
-    """A bare brain remote and two teammates, each with their own project clone and GONJINEH_HOME."""
+    """A bare brain remote and two teammates, each with their own project clone and GANJINEH_HOME."""
     remote = tmp_path / "brain.git"
     git("init", "-q", "--bare", "-b", "main", str(remote), cwd=tmp_path)
     app = tmp_path / "app-alice"
@@ -28,7 +28,7 @@ def team(tmp_path, monkeypatch):
     t = {"remote": remote, "tmp": tmp_path}
 
     def member(name, area, root):
-        env = {"GONJINEH_HOME": str(tmp_path / f"home-{name}"), "HOME": str(tmp_path / f"home-{name}"), "GIT_AUTHOR_NAME": name, "GIT_AUTHOR_EMAIL": f"{name}@x", "GIT_COMMITTER_NAME": name, "GIT_COMMITTER_EMAIL": f"{name}@x"}
+        env = {"GANJINEH_HOME": str(tmp_path / f"home-{name}"), "HOME": str(tmp_path / f"home-{name}"), "GIT_AUTHOR_NAME": name, "GIT_AUTHOR_EMAIL": f"{name}@x", "GIT_COMMITTER_NAME": name, "GIT_COMMITTER_EMAIL": f"{name}@x"}
         (tmp_path / f"home-{name}").mkdir(exist_ok=True)
         r = run(["init", "--brain", str(remote), "--project", "shop", "--author", name, "--area", area], root, env)
         assert r.returncode == 0, r.stderr + r.stdout

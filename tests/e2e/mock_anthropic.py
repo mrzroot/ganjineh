@@ -1,5 +1,5 @@
 import json, os, sys, http.server, threading
-OUT = os.environ.get("E2E_OUT", "/tmp/gonjineh-e2e")
+OUT = os.environ.get("E2E_OUT", "/tmp/ganjineh-e2e")
 os.makedirs(OUT, exist_ok=True)
 LOG = open(OUT + "/mock_requests.log", "a")
 def sse(ev, data): return f"event: {ev}\ndata: {json.dumps(data)}\n\n".encode()
@@ -23,7 +23,7 @@ class H(http.server.BaseHTTPRequestHandler):
         blocks = []
         ptxt = json.dumps(msgs[0]) if msgs else ""
         if "MCPTEST" in ptxt and has_tools and not has_result:
-            blocks = [("tool_use", {"id": "toolu_01MCP", "name": "mcp__gonjineh__search_memory", "input": {"query": "login endpoint jwt"}})]
+            blocks = [("tool_use", {"id": "toolu_01MCP", "name": "mcp__ganjineh__search_memory", "input": {"query": "login endpoint jwt"}})]
             stop = "tool_use"
         elif "MCPTEST" in ptxt:
             blocks = [("text", "MCP search finished.")]; stop = "end_turn"

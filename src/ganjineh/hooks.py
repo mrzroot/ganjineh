@@ -13,8 +13,8 @@ MIN_SCORE = 2.5
 
 
 def spawn_sync(root: str, after: float = 0.0) -> None:
-    """Fire-and-forget `gonjineh sync` in a detached process (SessionEnd hooks only get ~1.5 s)."""
-    cmd = [sys.executable, "-m", "gonjineh", "sync", "--quiet", "--cwd", str(root)]
+    """Fire-and-forget `ganjineh sync` in a detached process (SessionEnd hooks only get ~1.5 s)."""
+    cmd = [sys.executable, "-m", "ganjineh", "sync", "--quiet", "--cwd", str(root)]
     if after:
         cmd += ["--after", str(after)]
     try:

@@ -1,6 +1,6 @@
 # Prior art and what is (and is not) new here
 
-Searches run on **2026-10-25** (web search, README skims; not a code audit). The short version: **team memory for AI coding agents is a crowded, fast-moving area, and gonjineh is not the first.** Several projects below are more mature or more featureful. This file exists so you can pick the right one, and so this repo does not claim more than it should.
+Searches run on **2026-10-25** (web search, README skims; not a code audit). The short version: **team memory for AI coding agents is a crowded, fast-moving area, and ganjineh is not the first.** Several projects below are more mature or more featureful. This file exists so you can pick the right one, and so this repo does not claim more than it should.
 
 ## Projects found
 
@@ -18,7 +18,7 @@ Searches run on **2026-10-25** (web search, README skims; not a code audit). The
 
 Absence from this table means "not found in a quick search", not "does not exist". Descriptions are second-hand summaries and may be out of date; please correct them via an issue.
 
-## The combination gonjineh chooses
+## The combination ganjineh chooses
 
 None of the individual ideas is new (hooks, git as transport, BM25, scrubbing, MCP). The specific bundle is a bet:
 
@@ -34,4 +34,4 @@ None of the individual ideas is new (hooks, git as transport, BM25, scrubbing, M
 - You want semantic (embedding) search, a web UI, access control per entry, or hosted sync.
 - You want LLM-written summaries of sessions.
 - You already use a tool above and it works.
-- You need a battle-tested tool today: this is v0.1.0 and verified only partially (see [docs/VERIFICATION.md](docs/VERIFICATION.md)).
+- You need a battle-tested tool today: this is v0.1.1 and verified only partially (see [docs/VERIFICATION.md](docs/VERIFICATION.md)).

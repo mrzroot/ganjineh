@@ -73,7 +73,7 @@ def handle(msg: dict, ctx_factory):
         want = params.get("protocolVersion")
         ver = want if want in PROTOCOLS else PROTOCOLS[0]
         return {"jsonrpc": "2.0", "id": mid, "result": {"protocolVersion": ver, "capabilities": {"tools": {}},
-                                                       "serverInfo": {"name": "gonjineh", "version": __version__}}}
+                                                       "serverInfo": {"name": "ganjineh", "version": __version__}}}
     if method == "ping":
         return {"jsonrpc": "2.0", "id": mid, "result": {}}
     if method == "tools/list":
@@ -96,7 +96,7 @@ def handle(msg: dict, ctx_factory):
 
 def serve(cwd=None, fin=sys.stdin, fout=sys.stdout):
     import os
-    cwd = cwd or os.environ.get("GONJINEH_PROJECT") or os.getcwd()
+    cwd = cwd or brain.env("PROJECT") or os.getcwd()
     for line in fin:
         line = line.strip()
         if not line:

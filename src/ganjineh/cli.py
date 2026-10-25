@@ -1,4 +1,4 @@
-"""gonjineh command line."""
+"""ganjineh command line."""
 from __future__ import annotations
 import argparse
 import json
@@ -18,6 +18,11 @@ def _ctx(args):
 def cmd_init(a):
     root = Path(a.cwd or os.getcwd()).resolve()
     pf = root / brain.PROJECT_FILE
+    old_pf = root / brain.LEGACY_PROJECT_FILE
+    if not pf.exists() and old_pf.exists():  # migrate the pre-0.1.1 project file
+        pf.write_text(old_pf.read_text())
+        old_pf.unlink()
+        print(f"migrated {old_pf.name} -> {pf.name}")
     if pf.exists():
         cfg = json.loads(pf.read_text())
         if a.brain and a.brain != cfg.get("brain"):
@@ -46,9 +51,9 @@ def cmd_init(a):
         cp = Path(os.environ.get("CODEX_HOME") or Path.home() / ".codex") / "config.toml"
         print(f"  codex ({cp}): {installer.codex_config(cp)}")
     else:
-        print("  codex: skipped (it is user-level config; run `gonjineh init --codex` to add notify + MCP to ~/.codex/config.toml)")
+        print("  codex: skipped (it is user-level config; run `ganjineh init --codex` to add notify + MCP to ~/.codex/config.toml)")
     gi = root / ".gitignore"
-    print("next: commit .gonjineh.json, CLAUDE.md, AGENTS.md etc. so teammates get the same setup; each teammate runs `gonjineh init` once.")
+    print("next: commit .ganjineh.json, CLAUDE.md, AGENTS.md etc. so teammates get the same setup; each teammate runs `ganjineh init` once.")
     return 0
 
 
@@ -193,7 +198,7 @@ def cmd_scrub(a):
     text = sys.stdin.read() if a.file == "-" else Path(a.file).read_text(encoding="utf-8", errors="replace")
     rep = Report()
     sys.stdout.write(scrub(text, report=rep))
-    print(f"\n[gonjineh] {rep.total} redaction(s): {rep.counts}", file=sys.stderr)
+    print(f"\n[ganjineh] {rep.total} redaction(s): {rep.counts}", file=sys.stderr)
     return 0
 
 
@@ -250,9 +255,9 @@ def cmd_doctor(a):
     cs = ctx.root / ".claude" / "settings.json"
     cl = ctx.root / ".claude" / "settings.local.json"
     has = any(p.exists() and installer.HOOK_MARK in p.read_text() for p in (cs, cl))
-    print(f"claude hooks: {'✓' if has else '✗ (run gonjineh init)'}")
+    print(f"claude hooks: {'✓' if has else '✗ (run ganjineh init)'}")
     cc = Path(os.environ.get("CODEX_HOME") or Path.home() / ".codex") / "config.toml"
-    print(f"codex notify: {'✓' if cc.exists() and installer.CODEX_BEGIN in cc.read_text() else '– (optional: gonjineh init --codex)'}")
+    print(f"codex notify: {'✓' if cc.exists() and installer.CODEX_BEGIN in cc.read_text() else '– (optional: ganjineh init --codex)'}")
     for rel in installer.INSTRUCTION_FILES:
         p = ctx.root / rel
         print(f"  {rel}: {'✓' if p.exists() and installer.BEGIN in p.read_text() else '✗'}")
@@ -264,13 +269,13 @@ def cmd_uninstall(a):
     installer.uninstall_project(root)
     if a.codex:
         installer.remove_codex_config(Path(os.environ.get("CODEX_HOME") or Path.home() / ".codex") / "config.toml")
-    print("removed managed blocks, hooks and MCP entries (the brain repo and .gonjineh.json were kept)")
+    print("removed managed blocks, hooks and MCP entries (the brain repo and .ganjineh.json were kept)")
     return 0
 
 
 def build_parser():
-    p = argparse.ArgumentParser(prog="gonjineh", description="Git-native shared memory for your team's AI coding agents.")
-    p.add_argument("--version", action="version", version=f"gonjineh {__version__}")
+    p = argparse.ArgumentParser(prog="ganjineh", description="Git-native shared memory for your team's AI coding agents.")
+    p.add_argument("--version", action="version", version=f"ganjineh {__version__}")
     p.add_argument("--cwd", help=argparse.SUPPRESS)
     sub = p.add_subparsers(dest="cmd", required=True)
 
@@ -317,6 +322,12 @@ def build_parser():
     return p
 
 
+def legacy_main(argv=None):
+    """Entry point of the deprecated `gonjineh` command (the old, misspelled name)."""
+    print("gonjineh is the old name: use `ganjineh` (same tool). This alias will be removed in a future release.", file=sys.stderr)
+    return main(argv)
+
+
 def main(argv=None):
     a = build_parser().parse_args(argv)
     if not hasattr(a, "cwd"):
@@ -324,8 +335,8 @@ def main(argv=None):
     try:
         return a.fn(a)
     except core.NoProject as e:
-        print(f"gonjineh: {e}", file=sys.stderr)
+        print(f"ganjineh: {e}", file=sys.stderr)
         return 1
     except RuntimeError as e:
-        print(f"gonjineh: {e}", file=sys.stderr)
+        print(f"ganjineh: {e}", file=sys.stderr)
         return 1

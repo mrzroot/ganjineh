@@ -4,7 +4,7 @@ Thanks for helping. Small PRs with a failing test first are the easiest to revie
 
 ```bash
 python -m venv .venv && . .venv/bin/activate && pip install pytest
-PYTHONPATH=src pytest tests          # 99 tests, a few seconds, no network
+PYTHONPATH=src pytest tests          # 109 tests, a few seconds, no network
 ```
 
 Rules of the road:

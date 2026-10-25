@@ -8,19 +8,19 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC = str(ROOT / "src")
-tmp = Path(tempfile.mkdtemp(prefix="gonjineh-demo-"))
+tmp = Path(tempfile.mkdtemp(prefix="ganjineh-demo-"))
 
 
 def sh(cmd, cwd, env):
-    e = {k: v for k, v in os.environ.items() if not k.startswith("GONJINEH_") and k != "CODEX_HOME"}
+    e = {k: v for k, v in os.environ.items() if not k.startswith("GANJINEH_") and k != "CODEX_HOME"}
     e.update(env, PYTHONPATH=SRC)
     return subprocess.run(cmd, cwd=cwd, env=e, capture_output=True, text=True)
 
 
 def gj(who, *args, show=True):
-    r = sh([sys.executable, "-m", "gonjineh", *args], who["dir"], who["env"])
+    r = sh([sys.executable, "-m", "ganjineh", *args], who["dir"], who["env"])
     if show:
-        print(f"\n[{who['name']}] $ gonjineh {' '.join(args)}")
+        print(f"\n[{who['name']}] $ ganjineh {' '.join(args)}")
         print((r.stdout + r.stderr).rstrip())
     return r
 
@@ -44,7 +44,7 @@ people = {}
 for name, area in (("maryam", "backend"), ("reza", "frontend")):
     d = tmp / f"shop-{name}"; d.mkdir()
     subprocess.run(["git", "init", "-q", "-b", "main"], cwd=d, check=True)
-    env = {"GONJINEH_HOME": str(tmp / f"home-{name}"), "HOME": str(tmp / f"home-{name}"), "GIT_AUTHOR_NAME": name, "GIT_AUTHOR_EMAIL": f"{name}@example.com", "GIT_COMMITTER_NAME": name, "GIT_COMMITTER_EMAIL": f"{name}@example.com"}
+    env = {"GANJINEH_HOME": str(tmp / f"home-{name}"), "HOME": str(tmp / f"home-{name}"), "GIT_AUTHOR_NAME": name, "GIT_AUTHOR_EMAIL": f"{name}@example.com", "GIT_COMMITTER_NAME": name, "GIT_COMMITTER_EMAIL": f"{name}@example.com"}
     (tmp / f"home-{name}").mkdir()
     people[name] = {"name": name, "dir": d, "env": env, "area": area}
 

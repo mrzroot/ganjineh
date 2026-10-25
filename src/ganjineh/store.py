@@ -189,7 +189,7 @@ def who_knows(entries: list[dict], target: str, limit: int = 5):
 def build_index(entries: list[dict], project: str | None = None, me: str | None = None) -> str:
     es = sorted(entries, key=lambda e: (e.get("date", ""), e.get("id", "")), reverse=True)
     lines = ["# Team brain index", "",
-             "_Generated locally by gonjineh; do not edit. Ask `gonjineh search <words>` or use the MCP tool `search_memory`._", ""]
+             "_Generated locally by ganjineh; do not edit. Ask `ganjineh search <words>` or use the MCP tool `search_memory`._", ""]
     if project:
         lines += [f"Project: **{project}**", ""]
     areas: dict[str, list] = {}
@@ -229,7 +229,7 @@ def briefing(entries: list[dict], me: str | None, limit: int = 6, max_chars: int
     if not others:
         return ""
     who = "recent entries (only yours so far)" if mine_only else "recent work by your teammates in this project"
-    out = [f"Team brain (gonjineh): {who}. Search before you assume something is missing: `gonjineh search \"<words>\"` or MCP tool search_memory."]
+    out = [f"Team brain (ganjineh): {who}. Search before you assume something is missing: `ganjineh search \"<words>\"` or MCP tool search_memory."]
     for e in others:
         bits = f"- {e['date']} {e['author']} [{e['area']}] {e['title']}"
         if e.get("files"):

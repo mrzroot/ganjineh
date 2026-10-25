@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from gonjineh import installer as I
+from ganjineh import installer as I
 
 
 def test_block_created_appended_idempotent(tmp_path):
@@ -39,7 +39,7 @@ def test_claude_hooks_merge_preserves_user_hooks(tmp_path):
     d = json.loads(s.read_text())
     assert d["permissions"] == {"allow": ["Bash(ls)"]}
     stop = d["hooks"]["Stop"]
-    assert len(stop) == 2 and sum("gonjineh hook" in h["command"] for g in stop for h in g["hooks"]) == 1
+    assert len(stop) == 2 and sum("ganjineh hook" in h["command"] for g in stop for h in g["hooks"]) == 1
     assert set(d["hooks"]) == {"SessionStart", "UserPromptSubmit", "Stop", "SessionEnd", "PreCompact"}
     I.remove_claude_hooks(tmp_path)
     d = json.loads(s.read_text())
@@ -63,8 +63,8 @@ def test_no_prompt_recall_option(tmp_path):
 def test_mcp_json_variants(tmp_path):
     I.mcp_json(tmp_path / ".mcp.json")
     I.mcp_json(tmp_path / ".vscode" / "mcp.json", key="servers", vscode=True)
-    a = json.loads((tmp_path / ".mcp.json").read_text())["mcpServers"]["gonjineh"]
-    b = json.loads((tmp_path / ".vscode" / "mcp.json").read_text())["servers"]["gonjineh"]
+    a = json.loads((tmp_path / ".mcp.json").read_text())["mcpServers"]["ganjineh"]
+    b = json.loads((tmp_path / ".vscode" / "mcp.json").read_text())["servers"]["ganjineh"]
     assert a["args"][-1] == "mcp" and b["type"] == "stdio"
 
 
@@ -83,11 +83,11 @@ def test_codex_config_notify_top_level_and_backup(tmp_path):
     assert I.codex_config(c) == "ok"
     t = c.read_text()
     assert t.index("notify") < t.index("[mcp_servers.x]")
-    assert t.count("[mcp_servers.gonjineh]") == 1 and (tmp_path / "config.toml.gonjineh.bak").exists()
+    assert t.count("[mcp_servers.ganjineh]") == 1 and (tmp_path / "config.toml.ganjineh.bak").exists()
     I.codex_config(c)
-    assert c.read_text().count("notify =") == 1 and c.read_text().count("[mcp_servers.gonjineh]") == 1
+    assert c.read_text().count("notify =") == 1 and c.read_text().count("[mcp_servers.ganjineh]") == 1
     I.remove_codex_config(c)
-    assert "gonjineh" not in c.read_text() and 'model = "gpt-5"' in c.read_text()
+    assert "ganjineh" not in c.read_text() and 'model = "gpt-5"' in c.read_text()
 
 
 def test_codex_existing_notify_is_not_overwritten(tmp_path):
@@ -101,7 +101,7 @@ def test_install_and_uninstall_project(tmp_path):
     out = I.install_project(tmp_path)
     for rel in I.INSTRUCTION_FILES:
         assert (tmp_path / rel).exists()
-    assert (tmp_path / ".cursor/rules/gonjineh.mdc").read_text().startswith("---\n")
+    assert (tmp_path / ".cursor/rules/ganjineh.mdc").read_text().startswith("---\n")
     I.uninstall_project(tmp_path)
     assert not any((tmp_path / rel).exists() for rel in I.INSTRUCTION_FILES)
     assert not (tmp_path / ".mcp.json").exists()

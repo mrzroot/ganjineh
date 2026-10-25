@@ -1,5 +1,5 @@
 import json, os, http.server
-OUT = os.environ.get("E2E_OUT", "/tmp/gonjineh-e2e")
+OUT = os.environ.get("E2E_OUT", "/tmp/ganjineh-e2e")
 os.makedirs(OUT, exist_ok=True)
 def sse(ev, data): return f"event: {ev}\ndata: {json.dumps(data)}\n\n".encode()
 class H(http.server.BaseHTTPRequestHandler):

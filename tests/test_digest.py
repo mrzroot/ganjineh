@@ -1,7 +1,7 @@
 import json
 from conftest import FIX, claude_lines, write_jsonl
-from gonjineh import transcripts, digest
-from gonjineh.core import Ctx
+from ganjineh import transcripts, digest
+from ganjineh.core import Ctx
 
 
 def build(rows, tmp_path, **kw):
@@ -54,7 +54,11 @@ def test_private_marker_skips_session(tmp_path):
     assert build(rows, tmp_path) is None
 
 
-def test_gonjineh_off_marker(tmp_path):
+def test_ganjineh_off_marker(tmp_path):
+    assert build(claude_lines("ganjineh:off fix", ["ok"]), tmp_path) is None
+
+
+def test_old_gonjineh_off_marker_still_works(tmp_path):
     assert build(claude_lines("gonjineh:off fix", ["ok"]), tmp_path) is None
 
 
@@ -156,7 +160,7 @@ def test_mask_email_is_opt_in_via_config(team):
         return run(["show", eid], a, team["alice"]).stdout
     run(["note", "ping dev@example.com about the cart", "--title", "mailone"], a, team["alice"])
     assert "dev@example.com" in stored("mailone")
-    cfgp = a / ".gonjineh.json"
+    cfgp = a / ".ganjineh.json"
     cfg = json.loads(cfgp.read_text()); cfg["mask_email"] = True; cfgp.write_text(json.dumps(cfg))
     run(["note", "ping other@example.com about orders", "--title", "mailtwo"], a, team["alice"])
     assert "other@example.com" not in stored("mailtwo")
