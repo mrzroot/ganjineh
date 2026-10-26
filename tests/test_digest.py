@@ -58,10 +58,6 @@ def test_ganjineh_off_marker(tmp_path):
     assert build(claude_lines("ganjineh:off fix", ["ok"]), tmp_path) is None
 
 
-def test_old_gonjineh_off_marker_still_works(tmp_path):
-    assert build(claude_lines("gonjineh:off fix", ["ok"]), tmp_path) is None
-
-
 def test_brainignore_removes_files_and_skips_when_all_ignored(tmp_path):
     rows = claude_lines("edit", ["done"], [("Edit", {"file_path": "/proj/.env"}), ("Edit", {"file_path": "/proj/src/app.py"})])
     e, _ = build(rows, tmp_path, ignore_patterns=[".env", "secrets/*"])

@@ -82,7 +82,7 @@ def build_entry(s: Session, *, author: str, project: str, area_rules=None, defau
     if not users:
         return None
     joined_user = "\n".join(users)
-    if re.search(r"(#private\b|ganjineh:off|gonjineh:off|#نهان\b)", joined_user):
+    if re.search(r"(#private\b|ganjineh:off|#نهان\b)", joined_user):
         return None
     files, seen = [], set()
     for name, inp in s.tool_calls:
