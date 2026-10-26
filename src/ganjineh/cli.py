@@ -322,12 +322,6 @@ def build_parser():
     return p
 
 
-def legacy_main(argv=None):
-    """Entry point of the deprecated `gonjineh` command (the old, misspelled name)."""
-    print("gonjineh is the old name: use `ganjineh` (same tool). This alias will be removed in a future release.", file=sys.stderr)
-    return main(argv)
-
-
 def main(argv=None):
     a = build_parser().parse_args(argv)
     if not hasattr(a, "cwd"):

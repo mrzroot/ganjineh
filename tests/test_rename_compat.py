@@ -88,10 +88,3 @@ def test_codex_old_block_replaced(tmp_path):
 
 def test_ignore_files(tmp_path):
     assert brain.IGNORE_FILES == (".ganjinehignore", ".brainignore")
-
-
-def test_legacy_command_prints_notice_and_works(tmp_path):
-    e = dict(os.environ, PYTHONPATH=SRC)
-    r = subprocess.run([sys.executable, "-m", "gonjineh", "--version"], env=e, capture_output=True, text=True, timeout=30)
-    assert r.returncode == 0 and "ganjineh 0.1.1" in r.stdout
-    assert "old name" in r.stderr and "ganjineh" in r.stderr

@@ -28,7 +28,6 @@ Issues = "https://github.com/mrzroot/ganjineh/issues"
 
 [project.scripts]
 ganjineh = "ganjineh.cli:main"
-gonjineh = "ganjineh.cli:legacy_main"  # deprecated alias (old, misspelled name)
 
 [tool.setuptools.dynamic]
 version = { attr = "ganjineh.__version__" }
