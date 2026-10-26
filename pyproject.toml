@@ -38,3 +38,12 @@ where = ["src"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
+
+# Style for the tests (run `ruff check tests && ruff format --check tests`); the library code is not formatted yet.
+[tool.ruff]
+line-length = 120
+extend-exclude = ["src", "examples"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "B"]
+ignore = ["E501"]  # the formatter wraps code; long string literals (sample transcripts, prompts) may stay on one line

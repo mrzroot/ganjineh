@@ -15,5 +15,6 @@ Rules of the road:
 - **Be honest in docs.** If you add support for a tool, say how you verified it (real CLI / format fixture / docs only).
 - Transcript fixtures should come from a real CLI run against a mock API, with the CLI version in the file name.
 - Optional: `tests/e2e/run_e2e.sh` with the real CLIs installed.
+- Test style: `pip install ruff`, then `ruff check tests` and `ruff format tests` (config in `pyproject.toml`). Each test file starts with a docstring saying what it covers.
 
 Useful contributions: secret shapes the scrubber misses, transcript formats for other tools (Gemini chat files, Cursor, Aider…), digest misses (decisions or gotchas not extracted), Persian text-normalization edge cases, Windows/macOS reports.
