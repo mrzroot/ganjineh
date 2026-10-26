@@ -151,7 +151,7 @@ sk_live in git history: False  |  commits: 2      # the fake key in maryam's cha
 - **تنظیمات Codex سطح کاربر است:** `init --codex` فایل `~/.codex/config.toml` را در یک بلوک علامت‌دار ویرایش می‌کند (`uninstall --codex` پاکش می‌کند). hook های Claude سطح پروژه‌اند و commit می‌شوند.
 - **تأییدها:** در Claude Code سرور MCP سطح پروژه تأیید شما را می‌خواهد؛ Gemini پوشه‌ی مورد اعتماد می‌خواهد.
 - **هنوز CI ندارد.** توکنی که این مخزن با آن منتشر شد دسترسی GitHub Actions (workflow) نداشت؛ پس `.github/workflows` وجود ندارد. تست‌ها را محلی اجرا کنید: `pip install pytest && PYTHONPATH=src pytest tests`.
-- **پروژه‌ی تازه (۰٫۱٫۰).** پیش از ۱٫۰ انتظار ناهمواری و تغییر قالب داشته باشید.
+- **پروژه‌ی تازه (۰٫۱٫۲).** پیش از ۱٫۰ انتظار ناهمواری و تغییر قالب داشته باشید.
 
 ## 🔍 جایگزین‌ها
 
