@@ -1,5 +1,5 @@
 import json
-from conftest import FIX, claude_lines, write_jsonl
+from conftest import FIXTURES, claude_lines, write_jsonl
 from ganjineh import transcripts, digest
 from ganjineh.core import Ctx
 
@@ -11,14 +11,14 @@ def build(rows, tmp_path, **kw):
 
 
 def test_real_claude_fixture_parses():
-    s = transcripts.read_any(FIX / "claude-code-2.1.197-mock-api-session.jsonl")
+    s = transcripts.read_any(FIXTURES / "claude-code-2.1.197-mock-api-session.jsonl")
     assert s.tool == "claude-code" and s.session_id and s.cwd
     assert [r for r, _ in s.messages][0] == "user"
     assert any(n == "Write" for n, _ in s.tool_calls)
 
 
 def test_real_claude_fixture_digest():
-    s = transcripts.read_any(FIX / "claude-code-2.1.197-mock-api-session.jsonl")
+    s = transcripts.read_any(FIXTURES / "claude-code-2.1.197-mock-api-session.jsonl")
     e, rep = digest.build_entry(s, author="a", project="p")
     assert e["files"] == ["backend/auth.py"] and e["area"] == "backend"
     assert "POST /api/login" in e["endpoints"]
@@ -26,7 +26,7 @@ def test_real_claude_fixture_digest():
 
 
 def test_real_codex_fixture_digest():
-    s = transcripts.read_any(FIX / "codex-0.164.0-mock-api-rollout.jsonl")
+    s = transcripts.read_any(FIXTURES / "codex-0.164.0-mock-api-rollout.jsonl")
     assert s.tool == "codex" and s.cwd
     e, _ = digest.build_entry(s, author="a", project="p")
     assert e["files"] == ["frontend/LoginForm.tsx"] and e["area"] == "frontend"
@@ -36,8 +36,8 @@ def test_real_codex_fixture_digest():
 
 
 def test_format_autodetect():
-    assert transcripts.detect(FIX / "claude-code-2.1.197-mock-api-session.jsonl") == "claude"
-    assert transcripts.detect(FIX / "codex-0.164.0-mock-api-rollout.jsonl") == "codex"
+    assert transcripts.detect(FIXTURES / "claude-code-2.1.197-mock-api-session.jsonl") == "claude"
+    assert transcripts.detect(FIXTURES / "codex-0.164.0-mock-api-rollout.jsonl") == "codex"
 
 
 def test_secrets_in_prompt_and_reply_are_scrubbed(tmp_path):
