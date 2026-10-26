@@ -15,7 +15,7 @@ Date: 2026-10-25. Environment: Linux, Python 3.x, git. **No live model session w
 
 ## Automated tests
 
-- `PYTHONPATH=src pytest tests`: **109 tests** (scrubber, Persian text normalization, search, digest, installer idempotence/uninstall, MCP, two-teammate flows over a local bare repo, concurrent pushes, offline sync, private sessions, Codex notify with a synthetic rollout).
+- `PYTHONPATH=src pytest tests`: **100 tests** (scrubber, Persian text normalization, search, digest, installer idempotence/uninstall, MCP, two-teammate flows over a local bare repo, concurrent pushes, offline sync, private sessions, Codex notify with a synthetic rollout).
 - `tests/e2e/run_e2e.sh`: **9 checks** with the real CLIs above against mock APIs (see `tests/e2e/README.md`). Last run: 9/9 passed.
 - Fixtures `tests/fixtures/claude-code-*.jsonl` and `codex-*.jsonl` are real transcripts produced by those CLIs against the mock API.
 

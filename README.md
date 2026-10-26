@@ -7,7 +7,7 @@
 
 **English** · [فارسی](README.fa.md) · [🌐 Live demo](https://mrzroot.github.io/ganjineh/) · [📦 Release v0.1.1](https://github.com/mrzroot/ganjineh/releases/tag/v0.1.1) · [🗒 Changelog](CHANGELOG.md)
 
-![version](https://img.shields.io/badge/version-0.1.1-8e3f4a) ![python](https://img.shields.io/badge/python-3.9%2B-8e3f4a) ![deps](https://img.shields.io/badge/dependencies-none-6f4e37) ![server](https://img.shields.io/badge/server-none-6f4e37) ![llm](https://img.shields.io/badge/LLM%20calls-none-6f4e37) ![tests](https://img.shields.io/badge/tests-109%20passing-6f4e37) ![license](https://img.shields.io/badge/license-MIT-a07a2c)
+![version](https://img.shields.io/badge/version-0.1.1-8e3f4a) ![python](https://img.shields.io/badge/python-3.9%2B-8e3f4a) ![deps](https://img.shields.io/badge/dependencies-none-6f4e37) ![server](https://img.shields.io/badge/server-none-6f4e37) ![llm](https://img.shields.io/badge/LLM%20calls-none-6f4e37) ![tests](https://img.shields.io/badge/tests-100%20passing-6f4e37) ![license](https://img.shields.io/badge/license-MIT-a07a2c)
 
 </div>
 
