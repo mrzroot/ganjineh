@@ -15,6 +15,7 @@ Files written to `E2E_OUT`:
 
 Nothing here is a real model: the replies are fixed text.
 """
+
 import json
 
 from mock_common import OUT_DIR, MockHandler, serve, sse_event
@@ -66,8 +67,10 @@ def plan_reply(request: dict) -> list:
 
 # Placeholder token counts: the `response.completed` event carries a usage block, so the mock includes one.
 COMPLETED_USAGE = {
-    "input_tokens": 1, "input_tokens_details": None,
-    "output_tokens": 1, "output_tokens_details": None,
+    "input_tokens": 1,
+    "input_tokens_details": None,
+    "output_tokens": 1,
+    "output_tokens_details": None,
     "total_tokens": 2,
 }
 
@@ -82,11 +85,18 @@ class OpenAIMock(MockHandler):
         self.start_event_stream()
         self.write_chunk(sse_event("response.created", {"type": "response.created", "response": {"id": "resp_mock"}}))
         for item in plan_reply(request):
-            self.write_chunk(sse_event("response.output_item.done", {"type": "response.output_item.done", "item": item}))
-        self.write_chunk(sse_event("response.completed", {
-            "type": "response.completed",
-            "response": {"id": "resp_mock", "usage": COMPLETED_USAGE},
-        }))
+            self.write_chunk(
+                sse_event("response.output_item.done", {"type": "response.output_item.done", "item": item})
+            )
+        self.write_chunk(
+            sse_event(
+                "response.completed",
+                {
+                    "type": "response.completed",
+                    "response": {"id": "resp_mock", "usage": COMPLETED_USAGE},
+                },
+            )
+        )
         self.end_event_stream()
 
 

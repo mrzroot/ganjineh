@@ -15,6 +15,7 @@ Two files in `E2E_OUT` are what the test reads back:
 
 Nothing here is a real model: the replies are fixed text.
 """
+
 import json
 import os
 
@@ -64,14 +65,22 @@ def plan_reply(request: dict):
 
 
 def message_start(model: str) -> bytes:
-    return sse_event("message_start", {
-        "type": "message_start",
-        "message": {
-            "id": "msg_mock", "type": "message", "role": "assistant", "model": model,
-            "content": [], "stop_reason": None, "stop_sequence": None,
-            "usage": {"input_tokens": 10, "output_tokens": 1},
+    return sse_event(
+        "message_start",
+        {
+            "type": "message_start",
+            "message": {
+                "id": "msg_mock",
+                "type": "message",
+                "role": "assistant",
+                "model": model,
+                "content": [],
+                "stop_reason": None,
+                "stop_sequence": None,
+                "usage": {"input_tokens": 10, "output_tokens": 1},
+            },
         },
-    })
+    )
 
 
 def content_block_events(index: int, kind: str, value) -> list:
@@ -92,11 +101,14 @@ def content_block_events(index: int, kind: str, value) -> list:
 
 def message_end(stop_reason: str) -> list:
     return [
-        sse_event("message_delta", {
-            "type": "message_delta",
-            "delta": {"stop_reason": stop_reason, "stop_sequence": None},
-            "usage": {"output_tokens": 20},
-        }),
+        sse_event(
+            "message_delta",
+            {
+                "type": "message_delta",
+                "delta": {"stop_reason": stop_reason, "stop_sequence": None},
+                "usage": {"output_tokens": 20},
+            },
+        ),
         sse_event("message_stop", {"type": "message_stop"}),
     ]
 

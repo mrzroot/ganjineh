@@ -7,6 +7,7 @@ the test inspect what ganjineh's hooks put into the request without needing a mo
 Both vendors stream their answer as Server-Sent Events over a chunked HTTP/1.1 response. That framing is
 vendor-neutral, so it lives here; the vendor-specific event shapes stay in the mock files.
 """
+
 import http.server
 import json
 import os
