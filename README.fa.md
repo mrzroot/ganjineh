@@ -7,11 +7,11 @@
 
 <div dir="rtl">
 
-[English](README.md) · **فارسی** · [🌐 نمونه‌ی زنده](https://mrzroot.github.io/ganjineh/) · [📦 انتشار نسخه‌ی ۰٫۱٫۱](https://github.com/mrzroot/ganjineh/releases/tag/v0.1.1) · [🗒 تغییرات](CHANGELOG.md)
+[English](README.md) · **فارسی** · [🌐 نمونه‌ی زنده](https://mrzroot.github.io/ganjineh/) · [📦 انتشار نسخه‌ی ۰٫۱٫۲](https://github.com/mrzroot/ganjineh/releases/tag/v0.1.2) · [🗒 تغییرات](CHANGELOG.md)
 
 </div>
 
-![version](https://img.shields.io/badge/version-0.1.1-8e3f4a) ![python](https://img.shields.io/badge/python-3.9%2B-8e3f4a) ![deps](https://img.shields.io/badge/dependencies-none-6f4e37) ![server](https://img.shields.io/badge/server-none-6f4e37) ![llm](https://img.shields.io/badge/LLM%20calls-none-6f4e37) ![tests](https://img.shields.io/badge/tests-100%20passing-6f4e37) ![license](https://img.shields.io/badge/license-MIT-a07a2c)
+![version](https://img.shields.io/badge/version-0.1.2-8e3f4a) ![python](https://img.shields.io/badge/python-3.9%2B-8e3f4a) ![deps](https://img.shields.io/badge/dependencies-none-6f4e37) ![server](https://img.shields.io/badge/server-none-6f4e37) ![llm](https://img.shields.io/badge/LLM%20calls-none-6f4e37) ![tests](https://img.shields.io/badge/tests-100%20passing-6f4e37) ![license](https://img.shields.io/badge/license-MIT-a07a2c)
 
 </div>
 

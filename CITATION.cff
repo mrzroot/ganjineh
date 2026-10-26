@@ -2,8 +2,8 @@ cff-version: 1.2.0
 message: "If you use ganjineh, please cite it as below."
 title: "ganjineh: git-native shared memory for a team's AI coding agents"
 type: software
-version: 0.1.1
-date-released: 2026-10-25
+version: 0.1.2
+date-released: 2026-10-26
 license: MIT
 repository-code: "https://github.com/mrzroot/ganjineh"
 url: "https://mrzroot.github.io/ganjineh/"

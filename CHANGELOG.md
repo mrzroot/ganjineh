@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.2 (2026-10-26)
+
+Removes the compatibility code that 0.1.1 kept for the old spelling. Nobody had installed 0.1.0 yet, so the aliases and migrations only added code to maintain and a second name to document.
+
+- Removed: the `gonjineh` command and shim package, `GONJINEH_*` env fallbacks and `~/.gonjineh/`, `.gonjineh.json` handling, migration of old instruction blocks/hooks/MCP entries/Codex config, and the `gonjineh:off` privacy marker. If you installed 0.1.0, reinstall with `ganjineh init`.
+- Tests: the compat tests are gone (100 tests); `tests/e2e` and the shared test helpers were rewritten for readability (docstrings, small named functions, one shared mock-server module) with the same behavior; ruff config added for the tests.
+
 ## 0.1.1 (2026-10-26)
 
 - **Renamed to `ganjineh`.** The Persian word گنجینه is pronounced "ganjineh"; 0.1.0 spelled it "gonjineh" by mistake. Repository, package, command, MCP server name, env vars (`GANJINEH_*`), config (`.ganjineh.json`, `~/.ganjineh/`, `.ganjinehignore`) and the instruction-block markers all use the new spelling.

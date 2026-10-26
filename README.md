@@ -5,9 +5,9 @@
   <img src="assets/banner-light.png" alt="ganjineh (گنجینه): a shared notebook that your team's AI helpers read and write by themselves, kept in a git repo you own." width="100%">
 </picture>
 
-**English** · [فارسی](README.fa.md) · [🌐 Live demo](https://mrzroot.github.io/ganjineh/) · [📦 Release v0.1.1](https://github.com/mrzroot/ganjineh/releases/tag/v0.1.1) · [🗒 Changelog](CHANGELOG.md)
+**English** · [فارسی](README.fa.md) · [🌐 Live demo](https://mrzroot.github.io/ganjineh/) · [📦 Release v0.1.2](https://github.com/mrzroot/ganjineh/releases/tag/v0.1.2) · [🗒 Changelog](CHANGELOG.md)
 
-![version](https://img.shields.io/badge/version-0.1.1-8e3f4a) ![python](https://img.shields.io/badge/python-3.9%2B-8e3f4a) ![deps](https://img.shields.io/badge/dependencies-none-6f4e37) ![server](https://img.shields.io/badge/server-none-6f4e37) ![llm](https://img.shields.io/badge/LLM%20calls-none-6f4e37) ![tests](https://img.shields.io/badge/tests-100%20passing-6f4e37) ![license](https://img.shields.io/badge/license-MIT-a07a2c)
+![version](https://img.shields.io/badge/version-0.1.2-8e3f4a) ![python](https://img.shields.io/badge/python-3.9%2B-8e3f4a) ![deps](https://img.shields.io/badge/dependencies-none-6f4e37) ![server](https://img.shields.io/badge/server-none-6f4e37) ![llm](https://img.shields.io/badge/LLM%20calls-none-6f4e37) ![tests](https://img.shields.io/badge/tests-100%20passing-6f4e37) ![license](https://img.shields.io/badge/license-MIT-a07a2c)
 
 </div>
 
@@ -129,7 +129,7 @@ The scrubber is pattern-based. It will miss secrets with unusual shapes. Do not 
 - **Codex hooks are user-level**, which means `init --codex` edits `~/.codex/config.toml` (inside a marked block; `uninstall --codex` removes it). Claude hooks are project-level and committed.
 - **Claude Code and Gemini gates:** project-scoped MCP servers need your approval in Claude Code; Gemini needs a trusted folder.
 - **No CI yet.** The token used to publish this repo had no GitHub Actions (workflow) scope, so there is no `.github/workflows`. Run the tests locally: `pip install pytest && PYTHONPATH=src pytest tests`.
-- **Young project (v0.1.1).** Expect rough edges and format changes before 1.0.
+- **Young project (v0.1.2).** Expect rough edges and format changes before 1.0.
 
 ## 🔍 Alternatives and where this fits
 
