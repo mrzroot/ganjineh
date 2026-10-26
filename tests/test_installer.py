@@ -1,5 +1,5 @@
 import json
-from pathlib import Path
+
 from ganjineh import installer as I
 
 

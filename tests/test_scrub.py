@@ -1,5 +1,6 @@
 import pytest
-from ganjineh.scrub import scrub, Report, luhn, entropy
+
+from ganjineh.scrub import Report, entropy, luhn, scrub
 
 CASES = [
     ("AWS_KEY=AKIAIOSFODNN7EXAMPLE", "AKIAIOSFODNN7EXAMPLE"),
