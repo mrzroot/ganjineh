@@ -172,3 +172,8 @@ def test_uninstall_leaves_brain(team):
     run(["uninstall"], a, team["alice"])
     assert not (a / ".claude" / "settings.json").exists()
     assert (a / ".ganjineh.json").exists()
+
+
+def test_ignore_files_are_the_two_known_names():
+    from ganjineh import brain
+    assert brain.IGNORE_FILES == (".ganjinehignore", ".brainignore")

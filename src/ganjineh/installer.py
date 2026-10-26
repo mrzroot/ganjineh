@@ -18,15 +18,9 @@ This project shares AI-session memory between teammates (frontend, backend, ...)
 4. Memory can be stale: verify against the code before relying on it.
 {END}
 """
-# Pre-0.1.1 names (the project was briefly spelled "gonjineh"); recognised and migrated by `init`, never written.
-LEGACY_BEGIN, LEGACY_END = "<!-- gonjineh:begin -->", "<!-- gonjineh:end -->"
-LEGACY_MDC = ".cursor/rules/gonjineh.mdc"
-LEGACY_HOOK_MARK = "gonjineh hook"
-LEGACY_CODEX_BEGIN, LEGACY_CODEX_END = "# >>> gonjineh (managed) >>>", "# <<< gonjineh (managed) <<<"
 MDC_HEAD = "---\ndescription: Shared team memory (ganjineh): search it before assuming what exists in another part of the codebase\nalwaysApply: true\n---\n"
 INSTRUCTION_FILES = ["CLAUDE.md", "AGENTS.md", "GEMINI.md", ".github/copilot-instructions.md", ".cursor/rules/ganjineh.mdc"]
 HOOK_MARK = "ganjineh hook"
-HOOK_MARKS = (HOOK_MARK, LEGACY_HOOK_MARK)
 CLAUDE_EVENTS = ["SessionStart", "UserPromptSubmit", "Stop", "SessionEnd", "PreCompact"]
 
 
@@ -38,10 +32,6 @@ def write_block(path: Path, content: str = BLOCK, head: str = "") -> str:
     path.parent.mkdir(parents=True, exist_ok=True)
     if path.exists():
         txt = path.read_text(encoding="utf-8")
-        if LEGACY_BEGIN in txt and LEGACY_END in txt:  # migrate the old block in place
-            new = re.sub(re.escape(LEGACY_BEGIN) + r".*?" + re.escape(LEGACY_END) + r"\n?", lambda m: content, txt, flags=re.S)
-            path.write_text(new, encoding="utf-8")
-            return "migrated"
         if BEGIN in txt and END in txt:
             new = re.sub(re.escape(BEGIN) + r".*?" + re.escape(END) + r"\n?", lambda m: content, txt, flags=re.S)
             if new == txt:
@@ -58,13 +48,11 @@ def remove_block(path: Path) -> bool:
     if not path.exists():
         return False
     txt = path.read_text(encoding="utf-8")
-    if BEGIN not in txt and LEGACY_BEGIN not in txt:
+    if BEGIN not in txt:
         return False
-    new = txt
-    for b, e in ((BEGIN, END), (LEGACY_BEGIN, LEGACY_END)):
-        new = re.sub(r"\n*" + re.escape(b) + r".*?" + re.escape(e) + r"\n?", "\n", new, flags=re.S)
+    new = re.sub(r"\n*" + re.escape(BEGIN) + r".*?" + re.escape(END) + r"\n?", "\n", txt, flags=re.S)
     new = new.strip("\n")
-    if not new or new.startswith("---") and new.count("---") == 2 and ("ganjineh" in new or "gonjineh" in new):
+    if not new or new.startswith("---") and new.count("---") == 2 and "ganjineh" in new:
         path.unlink()
     else:
         path.write_text(new + "\n", encoding="utf-8")
@@ -92,7 +80,7 @@ def claude_hooks(root: Path, local: bool = False, prompt_recall: bool = True) ->
         if ev == "UserPromptSubmit" and not prompt_recall:
             continue
         arr = hooks.setdefault(ev, [])
-        arr[:] = [g for g in arr if not any(m in (h.get("command") or "") for m in HOOK_MARKS for h in g.get("hooks", []))]
+        arr[:] = [g for g in arr if not any(HOOK_MARK in (h.get("command") or "") for h in g.get("hooks", []))]
         arr.append({"hooks": [{"type": "command", "command": cmd, "timeout": 20}]})
     _dump_json(p, d)
     return str(p)
@@ -106,7 +94,7 @@ def remove_claude_hooks(root: Path) -> None:
         d = _load_json(p)
         hooks = d.get("hooks", {})
         for ev in list(hooks):
-            hooks[ev] = [g for g in hooks[ev] if not any(m in (h.get("command") or "") for m in HOOK_MARKS for h in g.get("hooks", []))]
+            hooks[ev] = [g for g in hooks[ev] if not any(HOOK_MARK in (h.get("command") or "") for h in g.get("hooks", []))]
             if not hooks[ev]:
                 del hooks[ev]
         if not hooks:
@@ -122,8 +110,7 @@ def mcp_json(path: Path, key: str = "mcpServers", vscode: bool = False) -> str:
     entry = {"command": exe().split()[0], "args": exe().split()[1:] + ["mcp"]}
     if vscode:
         entry = {"type": "stdio", **entry}
-    d.setdefault(key, {}).pop("gonjineh", None)  # drop the pre-0.1.1 entry
-    d[key]["ganjineh"] = entry
+    d.setdefault(key, {})["ganjineh"] = entry
     _dump_json(path, d)
     return str(path)
 
@@ -133,7 +120,6 @@ def remove_mcp_json(path: Path, key: str = "mcpServers") -> None:
         return
     d = _load_json(path)
     d.get(key, {}).pop("ganjineh", None)
-    d.get(key, {}).pop("gonjineh", None)
     if not d.get(key):
         d.pop(key, None)
     if d:
@@ -148,8 +134,7 @@ CODEX_BEGIN, CODEX_END = "# >>> ganjineh (managed) >>>", "# <<< ganjineh (manage
 def codex_config(config_path: Path, with_mcp: bool = True) -> str:
     """Add `notify` (top level, must precede tables) and an MCP server entry to ~/.codex/config.toml between markers."""
     txt = config_path.read_text(encoding="utf-8") if config_path.exists() else ""
-    for b, e in ((CODEX_BEGIN, CODEX_END), (LEGACY_CODEX_BEGIN, LEGACY_CODEX_END)):
-        txt = re.sub(re.escape(b) + r".*?" + re.escape(e) + r"\n?", "", txt, flags=re.S)
+    txt = re.sub(re.escape(CODEX_BEGIN) + r".*?" + re.escape(CODEX_END) + r"\n?", "", txt, flags=re.S)
     parts = exe().split()
     has_notify = re.search(r"^\s*notify\s*=", txt, re.M) is not None
     status = "ok"
@@ -171,18 +156,12 @@ def codex_config(config_path: Path, with_mcp: bool = True) -> str:
 def remove_codex_config(config_path: Path) -> None:
     if config_path.exists():
         txt = config_path.read_text(encoding="utf-8")
-        for b, e in ((CODEX_BEGIN, CODEX_END), (LEGACY_CODEX_BEGIN, LEGACY_CODEX_END)):
-            txt = re.sub(re.escape(b) + r".*?" + re.escape(e) + r"\n?", "", txt, flags=re.S)
+        txt = re.sub(re.escape(CODEX_BEGIN) + r".*?" + re.escape(CODEX_END) + r"\n?", "", txt, flags=re.S)
         config_path.write_text(txt.strip("\n") + "\n" if txt.strip() else "", encoding="utf-8")
 
 
 def install_project(root: Path, *, claude=True, local_hooks=False, prompt_recall=True, mcp=True) -> dict:
     out = {}
-    if (root / LEGACY_MDC).exists():  # old Cursor rule file: replaced by ganjineh.mdc
-        remove_block(root / LEGACY_MDC)
-        if (root / LEGACY_MDC).exists():
-            (root / LEGACY_MDC).unlink()
-        out[LEGACY_MDC] = "removed (renamed to ganjineh.mdc)"
     for rel in INSTRUCTION_FILES:
         p = root / rel
         out[rel] = write_block(p, BLOCK, MDC_HEAD if rel.endswith(".mdc") else "")
@@ -197,7 +176,7 @@ def install_project(root: Path, *, claude=True, local_hooks=False, prompt_recall
 
 
 def uninstall_project(root: Path) -> None:
-    for rel in (*INSTRUCTION_FILES, LEGACY_MDC):
+    for rel in INSTRUCTION_FILES:
         remove_block(root / rel)
     remove_claude_hooks(root)
     for rel, key in ((".mcp.json", "mcpServers"), (".cursor/mcp.json", "mcpServers"), (".gemini/settings.json", "mcpServers"), (".vscode/mcp.json", "servers")):
