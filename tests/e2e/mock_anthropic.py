@@ -21,13 +21,7 @@ class H(http.server.BaseHTTPRequestHandler):
         has_result = isinstance(last.get("content"), list) and any(b.get("type") == "tool_result" for b in last["content"])
         has_tools = bool(req.get("tools"))
         blocks = []
-        ptxt = json.dumps(msgs[0]) if msgs else ""
-        if "MCPTEST" in ptxt and has_tools and not has_result:
-            blocks = [("tool_use", {"id": "toolu_01MCP", "name": "mcp__ganjineh__search_memory", "input": {"query": "login endpoint jwt"}})]
-            stop = "tool_use"
-        elif "MCPTEST" in ptxt:
-            blocks = [("text", "MCP search finished.")]; stop = "end_turn"
-        elif has_tools and not has_result:
+        if has_tools and not has_result:
             blocks = [("text", "I'll add the login endpoint. We decided to use JWT instead of server sessions because the frontend is a SPA. POST /api/login returns a token."),
                       ("tool_use", {"id": "toolu_01MOCK", "name": "Write", "input": {"file_path": os.path.join(os.environ.get("E2E_PROJ", "/tmp"), "backend/auth.py"), "content": "# POST /api/login\nAPI_KEY = 'sk-ant-api03-ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'\ndef login(): pass\n"}})]
             stop = "tool_use"
