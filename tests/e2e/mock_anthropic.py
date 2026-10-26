@@ -103,7 +103,7 @@ def message_end(stop_reason: str) -> list:
 
 class AnthropicMock(MockHandler):
     def do_GET(self):
-        """Claude Code lists models at startup; an empty list is enough."""
+        """The models-list endpoint: an empty list is all the mock needs to answer."""
         self.send_json(b'{"data":[]}')
 
     def do_POST(self):
@@ -112,7 +112,7 @@ class AnthropicMock(MockHandler):
         REQUEST_LOG.write(f"{self.path} {request.get('model')} tools={len(request.get('tools') or [])}\n")
         REQUEST_LOG.flush()
 
-        if "count_tokens" in self.path:  # Claude Code pre-counts tokens; any number will do
+        if "count_tokens" in self.path:  # the token-counting endpoint: any number will do
             self.send_json(b'{"input_tokens": 10}')
             return
 

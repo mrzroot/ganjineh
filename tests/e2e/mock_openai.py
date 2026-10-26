@@ -64,7 +64,7 @@ def plan_reply(request: dict) -> list:
     return [assistant_message(PLAN_TEXT), shell_call]
 
 
-# Codex rejects a `response.completed` without a usage block, even a made-up one.
+# Placeholder token counts: the `response.completed` event carries a usage block, so the mock includes one.
 COMPLETED_USAGE = {
     "input_tokens": 1, "input_tokens_details": None,
     "output_tokens": 1, "output_tokens_details": None,
