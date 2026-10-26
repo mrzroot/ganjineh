@@ -8,7 +8,6 @@ import time
 from pathlib import Path
 
 PROJECT_FILE = ".ganjineh.json"
-LEGACY_PROJECT_FILE = ".gonjineh.json"  # pre-0.1.1 name (the project was briefly spelled "gonjineh")
 BRAIN_IGNORE = ".ganjinehignore"
 IGNORE_FILES = (".ganjinehignore", ".brainignore")  # .brainignore is still read
 
@@ -16,12 +15,6 @@ IGNORE_FILES = (".ganjinehignore", ".brainignore")  # .brainignore is still read
 def env(name: str, default=None):
     """The value of the GANJINEH_<name> environment variable, or `default`."""
     return os.environ.get("GANJINEH_" + name) or default
-
-
-def project_file(root: Path) -> Path:
-    """The project config in `root`: the new name, or the legacy one if only that exists."""
-    new, old = root / PROJECT_FILE, root / LEGACY_PROJECT_FILE
-    return old if (old.exists() and not new.exists()) else new
 
 
 def home() -> Path:
@@ -65,13 +58,13 @@ def default_author() -> str:
 def find_project_root(start: str | Path | None = None) -> Path | None:
     p = Path(start or os.getcwd()).resolve()
     for d in [p, *p.parents]:
-        if (d / PROJECT_FILE).exists() or (d / LEGACY_PROJECT_FILE).exists():
+        if (d / PROJECT_FILE).exists():
             return d
     return None
 
 
 def load_project(root: Path) -> dict:
-    return json.loads(project_file(root).read_text())
+    return json.loads((root / PROJECT_FILE).read_text())
 
 
 def brain_dir_for(remote: str, project: str) -> Path:
@@ -126,7 +119,7 @@ def has_remote(path: Path) -> bool:
 
 
 def commit_local(path: Path, message: str) -> bool:
-    paths = [x for x in ("entries", ".gitignore", "README.md", "ganjineh.json", "gonjineh.json") if (path / x).exists()]
+    paths = [x for x in ("entries", ".gitignore", "README.md", "ganjineh.json") if (path / x).exists()]
     if paths:
         git(["add", "-A", "--", *paths], path)
     if git(["diff", "--cached", "--quiet"], path, check=False).returncode == 0:

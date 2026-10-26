@@ -46,14 +46,6 @@ def test_init_migrates_hooks_mcp_mdc_and_project_file(tmp_path):
     assert set(mcp) == {"ganjineh", "other"}
 
 
-def test_legacy_project_file_alone_is_still_found(tmp_path):
-    (tmp_path / ".gonjineh.json").write_text(json.dumps({"schema": 1, "project": "p"}))
-    sub = tmp_path / "a" / "b"
-    sub.mkdir(parents=True)
-    assert brain.find_project_root(sub) == tmp_path
-    assert brain.load_project(tmp_path)["project"] == "p"
-
-
 def test_codex_old_block_replaced(tmp_path):
     c = tmp_path / "config.toml"
     c.write_text('# >>> gonjineh (managed) >>>\nnotify = ["gonjineh", "hook", "codex"]\n# <<< gonjineh (managed) <<<\nmodel = "x"\n'

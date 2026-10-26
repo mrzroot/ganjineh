@@ -18,11 +18,6 @@ def _ctx(args):
 def cmd_init(a):
     root = Path(a.cwd or os.getcwd()).resolve()
     pf = root / brain.PROJECT_FILE
-    old_pf = root / brain.LEGACY_PROJECT_FILE
-    if not pf.exists() and old_pf.exists():  # migrate the pre-0.1.1 project file
-        pf.write_text(old_pf.read_text())
-        old_pf.unlink()
-        print(f"migrated {old_pf.name} -> {pf.name}")
     if pf.exists():
         cfg = json.loads(pf.read_text())
         if a.brain and a.brain != cfg.get("brain"):
