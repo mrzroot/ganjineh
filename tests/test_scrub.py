@@ -1,7 +1,15 @@
+"""Secret scrubbing (ganjineh.scrub): the most security-critical module, so tested in both directions.
+
+Every secret shape must be masked (`test_secret_is_removed` over CASES), and ordinary code, paths and Persian text must be
+left alone (`test_normal_text_untouched`). Also covers card numbers (Luhn), phone numbers, opt-in e-mail masking,
+entropy, and idempotence.
+"""
+
 import pytest
 
 from ganjineh.scrub import Report, entropy, luhn, scrub
 
+# (text containing a secret, the part of the secret that must not survive)
 CASES = [
     ("AWS_KEY=AKIAIOSFODNN7EXAMPLE", "AKIAIOSFODNN7EXAMPLE"),
     ("token ghp_" + "a1B2c3D4e5F6g7H8i9J0k1L2m3N4o5P6q7R8", "ghp_a1B2"),
@@ -31,16 +39,19 @@ def test_secret_is_removed(src, needle):
     assert "REDACTED" in out
 
 
-@pytest.mark.parametrize("safe", [
-    "const token = process.env.TOKEN",
-    "password = os.environ['DB_PASSWORD']",
-    "api_key=${API_KEY}",
-    "sort_key=name",
-    "commit 3b18e512dba79e4c8300dd08aeb37f8e728b8dad fixed it",
-    "src/components/very-long-kebab-case-component-name-for-the-login-page.tsx",
-    "session_id: abc",
-    "POST /api/login returns a token",
-])
+@pytest.mark.parametrize(
+    "safe",
+    [
+        "const token = process.env.TOKEN",
+        "password = os.environ['DB_PASSWORD']",
+        "api_key=${API_KEY}",
+        "sort_key=name",
+        "commit 3b18e512dba79e4c8300dd08aeb37f8e728b8dad fixed it",
+        "src/components/very-long-kebab-case-component-name-for-the-login-page.tsx",
+        "session_id: abc",
+        "POST /api/login returns a token",
+    ],
+)
 def test_normal_text_untouched(safe):
     assert scrub(safe) == safe
 
@@ -67,18 +78,17 @@ def test_report_counts():
     assert r.total == 2
 
 
+def with_luhn_check_digit(prefix):
+    """Complete a 15-digit `prefix` with the one check digit that makes it a Luhn-valid card number."""
+    return next(prefix + str(d) for d in range(10) if luhn(prefix + str(d)))
+
+
 def test_card_numbers_luhn_only_persian_and_latin_digits():
-    assert luhn("6037997397843821") is False or True  # helper runs
-    valid = "6219861012345678"
-    # find a luhn-valid 16-digit number
-    base = "621986101234567"
-    for d in range(10):
-        if luhn(base + str(d)):
-            valid = base + str(d)
-    fa = valid.translate(str.maketrans("0123456789", "۰۱۲۳۴۵۶۷۸۹"))
+    valid = with_luhn_check_digit("621986101234567")
+    persian_digits = valid.translate(str.maketrans("0123456789", "۰۱۲۳۴۵۶۷۸۹"))
     assert "REDACTED:card" in scrub(f"card {valid[:4]} {valid[4:8]} {valid[8:12]} {valid[12:]}")
-    assert "REDACTED:card" in scrub(f"کارت {fa}")
-    assert "1234567890123456" in scrub("order 1234567890123456")  # fails Luhn, not a card
+    assert "REDACTED:card" in scrub(f"کارت {persian_digits}")
+    assert "1234567890123456" in scrub("order 1234567890123456")  # fails Luhn, so not a card
 
 
 def test_iran_phone_masked_and_optional():
