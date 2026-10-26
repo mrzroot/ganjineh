@@ -7,7 +7,7 @@ SRC = str(Path(__file__).parent.parent / "src")
 
 
 def run(args, cwd, env=None, inp=None):
-    e = {k: v for k, v in os.environ.items() if not k.startswith(("GANJINEH_", "GONJINEH_")) and k != "CODEX_HOME"}
+    e = {k: v for k, v in os.environ.items() if not k.startswith("GANJINEH_") and k != "CODEX_HOME"}
     e["PYTHONPATH"] = SRC
     e.update(env or {})
     return subprocess.run([sys.executable, "-m", "ganjineh", *args], cwd=cwd, env=e, capture_output=True, text=True, input=inp, timeout=60)

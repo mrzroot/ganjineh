@@ -14,8 +14,8 @@ IGNORE_FILES = (".ganjinehignore", ".brainignore")  # .brainignore is still read
 
 
 def env(name: str, default=None):
-    """GANJINEH_<name>, falling back to the deprecated GONJINEH_<name>."""
-    return os.environ.get("GANJINEH_" + name) or os.environ.get("GONJINEH_" + name) or default
+    """The value of the GANJINEH_<name> environment variable, or `default`."""
+    return os.environ.get("GANJINEH_" + name) or default
 
 
 def project_file(root: Path) -> Path:
@@ -28,8 +28,7 @@ def home() -> Path:
     e = env("HOME")
     if e:
         return Path(e)
-    new, old = Path.home() / ".ganjineh", Path.home() / ".gonjineh"
-    return old if (old.is_dir() and not new.exists()) else new
+    return Path.home() / ".ganjineh"
 
 
 def git(args, cwd, check=True, timeout=60):

@@ -9,29 +9,6 @@ from ganjineh import brain, digest, installer as I
 from conftest import run, SRC
 
 
-def test_env_prefers_new_name_and_falls_back_to_old(monkeypatch):
-    for k in ("GANJINEH_AUTHOR", "GONJINEH_AUTHOR"):
-        monkeypatch.delenv(k, raising=False)
-    monkeypatch.setenv("GONJINEH_AUTHOR", "old")
-    assert brain.env("AUTHOR") == "old"
-    monkeypatch.setenv("GANJINEH_AUTHOR", "new")
-    assert brain.env("AUTHOR") == "new"
-
-
-def test_home_env_fallback_and_legacy_dir(monkeypatch, tmp_path):
-    for k in ("GANJINEH_HOME", "GONJINEH_HOME"):
-        monkeypatch.delenv(k, raising=False)
-    monkeypatch.setenv("GONJINEH_HOME", str(tmp_path / "o"))
-    assert brain.home() == tmp_path / "o"
-    monkeypatch.delenv("GONJINEH_HOME")
-    fake = tmp_path / "h"
-    (fake / ".gonjineh").mkdir(parents=True)
-    monkeypatch.setattr(Path, "home", staticmethod(lambda: fake))
-    assert brain.home() == fake / ".gonjineh"
-    (fake / ".ganjineh").mkdir()
-    assert brain.home() == fake / ".ganjineh"
-
-
 def test_old_instruction_block_is_migrated_in_place(tmp_path):
     p = tmp_path / "AGENTS.md"
     p.write_text("# Mine\n\n<!-- gonjineh:begin -->\n## Team brain (gonjineh)\nold text\n<!-- gonjineh:end -->\n\nkeep tail\n")
