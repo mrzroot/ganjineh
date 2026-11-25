@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Added a bilingual project walkthrough with a practical, reproducible first-use workflow. Documentation only; no runtime changes.
+
 ## 0.1.2 (2026-10-26)
 
 Removes the compatibility code that 0.1.1 kept for the old spelling. Nobody had installed 0.1.0 yet, so the aliases and migrations only added code to maintain and a second name to document.

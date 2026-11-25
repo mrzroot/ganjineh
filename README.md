@@ -9,6 +9,10 @@
 
 ![version](https://img.shields.io/badge/version-0.1.2-8e3f4a) ![python](https://img.shields.io/badge/python-3.9%2B-8e3f4a) ![deps](https://img.shields.io/badge/dependencies-none-6f4e37) ![server](https://img.shields.io/badge/server-none-6f4e37) ![llm](https://img.shields.io/badge/LLM%20calls-none-6f4e37) ![tests](https://img.shields.io/badge/tests-100%20passing-6f4e37) ![license](https://img.shields.io/badge/license-MIT-a07a2c)
 
+
+
+[Project walkthrough · راهنمای عملی پروژه](docs/project-guide.html)
+
 </div>
 
 > **In one sentence:** when you and a teammate each use an AI helper on the same project, the two helpers know nothing about each other. **ganjineh** is a shared team notebook that your AIs fill in and read by themselves, so one person's AI doesn't redo, or contradict, what another person's AI already did.
