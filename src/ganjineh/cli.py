@@ -268,6 +268,45 @@ def cmd_uninstall(a):
     return 0
 
 
+def cmd_stats(a):
+    """Print entry counts broken down by author, area, and tool."""
+    ctx = _ctx(a)
+    entries = ctx.entries(all_projects=a.all_projects)
+    by_area: dict[str, int] = {}
+    by_author: dict[str, int] = {}
+    by_tool: dict[str, int] = {}
+    dates: list[str] = []
+    for e in entries:
+        area = e.get("area") or "general"
+        author = e.get("author") or "unknown"
+        tool = e.get("tool") or "unknown"
+        by_area[area] = by_area.get(area, 0) + 1
+        by_author[author] = by_author.get(author, 0) + 1
+        by_tool[tool] = by_tool.get(tool, 0) + 1
+        if e.get("date"):
+            dates.append(str(e["date"]))
+    summary = {
+        "project": ctx.project,
+        "entries": len(entries),
+        "authors": dict(sorted(by_author.items(), key=lambda x: (-x[1], x[0]))),
+        "areas": dict(sorted(by_area.items(), key=lambda x: (-x[1], x[0]))),
+        "tools": dict(sorted(by_tool.items(), key=lambda x: (-x[1], x[0]))),
+        "latest_date": max(dates) if dates else None,
+        "has_remote": brain.has_remote(ctx.brain),
+    }
+    if a.json:
+        print(json.dumps(summary, ensure_ascii=False, indent=2))
+        return 0
+    print(f"project: {summary['project']} · entries: {summary['entries']} · latest: {summary['latest_date'] or 'never'}")
+    if summary["authors"]:
+        print("authors: " + ", ".join(f"{k} ({v})" for k, v in summary["authors"].items()))
+    if summary["areas"]:
+        print("areas:   " + ", ".join(f"{k} ({v})" for k, v in summary["areas"].items()))
+    if summary["tools"]:
+        print("tools:   " + ", ".join(f"{k} ({v})" for k, v in summary["tools"].items()))
+    return 0
+
+
 def build_parser():
     p = argparse.ArgumentParser(prog="ganjineh", description="Git-native shared memory for your team's AI coding agents.")
     p.add_argument("--version", action="version", version=f"ganjineh {__version__}")
@@ -312,6 +351,8 @@ def build_parser():
     s.add_argument("which", choices=["claude", "codex"]); s.add_argument("payload", nargs="*")
     s = add("mcp", cmd_mcp, "run the MCP server on stdio")
     s = add("doctor", cmd_doctor, "check the setup")
+    s = add("stats", cmd_stats, "summarize entries by author, area, and tool")
+    s.add_argument("--all-projects", action="store_true"); s.add_argument("--json", action="store_true")
     s = add("uninstall", cmd_uninstall, "remove what init added")
     s.add_argument("--codex", action="store_true")
     return p

@@ -365,3 +365,20 @@ def test_uninstall_leaves_brain(team):
 
 def test_ignore_files_are_the_two_known_names():
     assert brain.IGNORE_FILES == (".ganjinehignore", ".brainignore")
+
+
+def test_stats_summarizes_authors_and_areas(team):
+    alice_dir = team["alice_dir"]
+    s1 = make_session(alice_dir, "Build auth API", ["Added POST /api/auth."], ["server/auth.py"], "s-stat-1")
+    run(["capture", "--file", str(s1)], alice_dir, team["alice"])
+
+    res = run(["stats", "--json"], alice_dir, team["alice"])
+    assert res.returncode == 0, res.stderr
+    data = json.loads(res.stdout)
+    assert data["entries"] == 1
+    assert data["authors"].get("alice") == 1
+    assert data["areas"].get("backend") == 1
+    assert data["has_remote"] is True
+
+    text = run(["stats"], alice_dir, team["alice"])
+    assert text.returncode == 0 and "entries: 1" in text.stdout and "alice (1)" in text.stdout

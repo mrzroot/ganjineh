@@ -7,11 +7,11 @@
 
 <div dir="rtl">
 
-[English](README.md) · **فارسی** · [🌐 نمونه‌ی زنده](https://mrzroot.github.io/ganjineh/) · [📦 انتشار نسخه‌ی ۰٫۱٫۲](https://github.com/mrzroot/ganjineh/releases/tag/v0.1.2) · [🗒 تغییرات](CHANGELOG.md)
+[English](README.md) · **فارسی** · [🌐 نمونه‌ی زنده](https://mrzroot.github.io/ganjineh/) · [📦 انتشار نسخه‌ی ۰٫۲٫۰](https://github.com/mrzroot/ganjineh/releases/tag/v0.2.0) · [🗒 تغییرات](CHANGELOG.md)
 
 </div>
 
-![version](https://img.shields.io/badge/version-0.1.2-8e3f4a) ![python](https://img.shields.io/badge/python-3.9%2B-8e3f4a) ![deps](https://img.shields.io/badge/dependencies-none-6f4e37) ![server](https://img.shields.io/badge/server-none-6f4e37) ![llm](https://img.shields.io/badge/LLM%20calls-none-6f4e37) ![tests](https://img.shields.io/badge/tests-100%20passing-6f4e37) ![license](https://img.shields.io/badge/license-MIT-a07a2c)
+![version](https://img.shields.io/badge/version-0.2.0-8e3f4a) ![python](https://img.shields.io/badge/python-3.9%2B-8e3f4a) ![deps](https://img.shields.io/badge/dependencies-none-6f4e37) ![server](https://img.shields.io/badge/server-none-6f4e37) ![llm](https://img.shields.io/badge/LLM%20calls-none-6f4e37) ![tests](https://img.shields.io/badge/tests-101%20passing-6f4e37) ![license](https://img.shields.io/badge/license-MIT-a07a2c)
 
 </div>
 
@@ -70,7 +70,7 @@ git commit -m "Add ganjineh" && git push
 ۲. **هر پرامپت:** اگر یادداشت‌های هم‌تیمی‌ها با آن بخوانند، تا ۳ مورد به متن اضافه می‌شود (هرگز یادداشت‌های خودتان نه).
 ۳. **پایان جلسه یا فشرده‌سازی:** گفتگو خلاصه، پاک‌سازی، commit و در پس‌زمینه push می‌شود.
 
-دستی هم می‌شود: `ganjineh search "refund screen"`، `ganjineh who server/routes/auth.py`، `ganjineh recall`، `ganjineh show <id>`، `ganjineh doctor`، `ganjineh uninstall`.
+دستی هم می‌شود: `ganjineh search "refund screen"`، `ganjineh who server/routes/auth.py`، `ganjineh recall`، `ganjineh show <id>`، `ganjineh stats [--json]`، `ganjineh doctor`، `ganjineh uninstall`.
 
 ## 🎬 خروجی واقعی
 

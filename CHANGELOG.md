@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.0 (2026-11-26)
+
+- Added `ganjineh stats [--all-projects] [--json]` to summarize team memory entries by author, area, tool, latest date, and remote status.
+- Added automated CLI and JSON coverage in `tests/test_team.py`.
+
 ## 0.1.2 (2026-10-26)
 
 Removes the compatibility code that 0.1.1 kept for the old spelling. Nobody had installed 0.1.0 yet, so the aliases and migrations only added code to maintain and a second name to document.
